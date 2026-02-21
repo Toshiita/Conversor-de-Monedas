@@ -87,9 +87,13 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("to", to)
             startActivity(intent)
         }
+        val btnAddRate = findViewById<Button>(R.id.btnAddRate)
 
         btnHistory.setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
+        }
+        btnAddRate.setOnClickListener {
+            startActivity(Intent(this, AddRateActivity::class.java))
         }
     }
 }

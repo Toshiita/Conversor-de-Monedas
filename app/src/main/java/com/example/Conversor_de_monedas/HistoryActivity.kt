@@ -19,20 +19,26 @@ class HistoryActivity : AppCompatActivity() {
 
         val cursor = database.rawQuery("SELECT * FROM conversions", null)
 
-        val list = ArrayList<Conversion>()
+        val list = mutableListOf<Conversion>()
 
         while (cursor.moveToNext()) {
+
+            val id = cursor.getInt(0)
             val from = cursor.getString(1)
             val to = cursor.getString(2)
             val amount = cursor.getDouble(3)
             val result = cursor.getDouble(4)
             val date = cursor.getString(5)
+            val favorite = cursor.getInt(6)
 
-            list.add(Conversion(from, to, amount, result, date))
+            list.add(
+                Conversion(id, from, to, amount, result, date, favorite)
+            )
         }
 
         cursor.close()
 
-        recycler.adapter = HistoryAdapter(list)
+        val adapter = HistoryAdapter(list, db)
+        recycler.adapter = adapter
     }
 }

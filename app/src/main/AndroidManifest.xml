@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CurrencyConverterCA">
         <activity
+            android:name="com.example.Conversor_de_monedas.AddRateActivity"
+            android:exported="false" />
+        <activity
             android:name=".HistoryActivity"
             android:exported="false" />
         <activity
@@ -20,6 +23,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

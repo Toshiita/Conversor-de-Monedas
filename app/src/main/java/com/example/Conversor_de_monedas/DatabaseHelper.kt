@@ -9,7 +9,6 @@ class DatabaseHelper(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
 
-        // Crear tabla rates
         db.execSQL("""
             CREATE TABLE rates(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +18,6 @@ class DatabaseHelper(context: Context) :
             )
         """)
 
-        // Crear tabla conversions
         db.execSQL("""
             CREATE TABLE conversions(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,31 +25,14 @@ class DatabaseHelper(context: Context) :
                 to_code TEXT,
                 amount REAL,
                 result REAL,
-                date TEXT
+                date TEXT,
+                favorite INTEGER DEFAULT 0
             )
         """)
 
-
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('HNL','USD',0.038)")
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('USD','HNL',26.51)")
-
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('CRC','USD',0.0021)")
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('USD','CRC',480.78)")
-
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('GTQ','USD',0.130)")
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('USD','GTQ',7.68)")
-
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('NIO','USD',0.027)")
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('USD','NIO',36.70)")
-
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('HNL','NIO',1.38)")
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('NIO','HNL',0.72)")
-
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('HNL','CRC',18.14)")
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('CRC','HNL',0.055)")
-
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('HNL','GTQ',0.29)")
-        db.execSQL("INSERT INTO rates (from_code, to_code, rate) VALUES ('GTQ','HNL',3.45)")
+        // TASAS
+        db.execSQL("INSERT INTO rates VALUES (NULL,'HNL','USD',0.0406)")
+        db.execSQL("INSERT INTO rates VALUES (NULL,'USD','HNL',24.6)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -60,11 +41,9 @@ class DatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    // FUNCIÓN PARA OBTENER TASA
     fun getRate(from: String, to: String): Double {
 
         val db = readableDatabase
-
         val cursor = db.rawQuery(
             "SELECT rate FROM rates WHERE from_code=? AND to_code=?",
             arrayOf(from, to)
@@ -78,5 +57,20 @@ class DatabaseHelper(context: Context) :
 
         cursor.close()
         return rate
+    }
+    fun insertRate(from: String, to: String, rate: Double) {
+        val db = writableDatabase
+        db.execSQL(
+            "INSERT INTO rates (from_code, to_code, rate) VALUES (?,?,?)",
+            arrayOf(from, to, rate)
+        )
+    }
+    fun toggleFavorite(id: Int) {
+        val db = writableDatabase
+        db.execSQL("""
+            UPDATE conversions
+            SET favorite = CASE favorite WHEN 0 THEN 1 ELSE 0 END
+            WHERE id = ?
+        """, arrayOf(id))
     }
 }

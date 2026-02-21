@@ -107,6 +107,16 @@
             android:textColor="#1A237E"
             android:backgroundTint="#E8EAF6"/>
 
+        <!-- Botón Agregar Tasa Personalizada -->
+        <Button
+            android:id="@+id/btnAddRate"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Agregar Tasa"
+            android:textColor="#1A237E"
+            android:backgroundTint="#E3F2FD"
+            android:layout_marginTop="12dp"/>
+
     </LinearLayout>
 
 </ScrollView>
