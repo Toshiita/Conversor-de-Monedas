@@ -15,15 +15,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        //conexion con sqllite
         db = DatabaseHelper(this)
-
+        //controla el menu principal
         val etAmount = findViewById<EditText>(R.id.etAmount)
         val spFrom = findViewById<Spinner>(R.id.spFrom)
         val spTo = findViewById<Spinner>(R.id.spTo)
         val btnConvert = findViewById<Button>(R.id.btnConvert)
         val btnHistory = findViewById<Button>(R.id.btnHistory)
 
+        //lista monedas cargadas
         val currencies = arrayOf("HNL", "USD", "CRC", "GTQ", "NIO")
 
         spFrom.adapter = ArrayAdapter(
@@ -39,31 +40,33 @@ class MainActivity : AppCompatActivity() {
         )
 
         btnConvert.setOnClickListener {
-
+            //valida monto
             val amount = etAmount.text.toString().toDoubleOrNull()
 
             if (amount == null) {
                 Toast.makeText(this, "Ingrese un monto válido", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
+            //obtener moneda seleccionadas
             val from = spFrom.selectedItem.toString().trim().uppercase()
             val to = spTo.selectedItem.toString().trim().uppercase()
-
+            //valida que no sea misma moneda
             if (from == to) {
                 Toast.makeText(this, "Las monedas son iguales", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
+            //busca tasa en BD
             val rate = db.getRate(from, to)
-
+            //valida que exista la tasa
             if (rate == 0.0) {
                 Toast.makeText(this, "No existe tasa para esa conversión", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            //calcula resultado
             val result = amount * rate
 
+            //genera fecha
             val date = SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss",
                 Locale.getDefault()
@@ -77,8 +80,10 @@ class MainActivity : AppCompatActivity() {
             values.put("result", result)
             values.put("date", date)
 
+            //guardar y permite que aparezca en historial
             database.insert("conversions", null, values)
 
+            //envia datos a resultados
             val intent = Intent(this, ResultActivity::class.java)
             intent.putExtra("amount", amount)
             intent.putExtra("result", result)

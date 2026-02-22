@@ -1,4 +1,4 @@
-package com.example.Conversor_de_monedas   // DEJA TU PACKAGE COMO ESTÁ
+package com.example.Conversor_de_monedas
 
 import android.os.Bundle
 import android.widget.*
@@ -10,8 +10,9 @@ class AddRateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_rate)
 
+        //Guarda todo en S Q L
         val db = DatabaseHelper(this)
-
+        //conexion con interfaz grafica
         val spFrom = findViewById<Spinner>(R.id.spFrom)
         val spTo = findViewById<Spinner>(R.id.spTo)
         val etRate = findViewById<EditText>(R.id.etRate)
@@ -33,8 +34,10 @@ class AddRateActivity : AppCompatActivity() {
 
         btnSave.setOnClickListener {
 
+            //Obtiene Moneda de Origen y destino
             val from = spFrom.selectedItem.toString()
             val to = spTo.selectedItem.toString()
+            //evita error si el usuario escribe texto invalido
             val rate = etRate.text.toString().toDoubleOrNull()
 
             if (rate == null) {
@@ -42,6 +45,7 @@ class AddRateActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            //agrega las tasas ya personalizadas
             db.insertRate(from,to,rate)
 
             Toast.makeText(this,"Tasa guardada correctamente",Toast.LENGTH_SHORT).show()

@@ -62,7 +62,7 @@ class DatabaseHelper(context: Context) :
         onCreate(db)
     }
 
-    // ================= OBTENER TASA =================
+    // ================= BUSCA TASA =================
 
     fun getRate(from: String, to: String): Double {
 
@@ -82,7 +82,7 @@ class DatabaseHelper(context: Context) :
 
         cursor.close()
 
-        //  Buscar tasa inversa automáticamente
+        //  Buscar tasa inversa automáticamente por si no encuentra alguna conversion
         cursor = db.rawQuery(
             "SELECT rate FROM rates WHERE UPPER(from_code)=? AND UPPER(to_code)=?",
             arrayOf(to.uppercase(), from.uppercase())

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-// Data class
+// conversion guardada en bd
 data class Conversion(
     val id: Int,
     val from: String,
@@ -17,6 +17,7 @@ data class Conversion(
     var favorite: Int
 )
 
+//lista con conversiones y conexion con bd y agrega a favoritos
 class HistoryAdapter(
     private val list: MutableList<Conversion>,
     private val db: DatabaseHelper
@@ -30,10 +31,12 @@ class HistoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
+            //carga historial al xml
             .inflate(R.layout.item_conversion, parent, false)
         return ViewHolder(view)
     }
 
+    //indica cantidad de elementos en lista
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -43,7 +46,7 @@ class HistoryAdapter(
         // Texto conversión
         holder.tvConversion.text =
             "${item.amount} ${item.from} → ${item.result} ${item.to}"
-
+        //fecha que se hizo la conversion
         holder.tvDate.text = item.date
 
         // Mostrar estrella

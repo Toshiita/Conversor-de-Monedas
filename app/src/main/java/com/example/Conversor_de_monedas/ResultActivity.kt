@@ -9,17 +9,18 @@ class ResultActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
-
+        //recibe datos de mainactivity
         val amount = intent.getDoubleExtra("amount", 0.0)
         val result = intent.getDoubleExtra("result", 0.0)
         val rate = intent.getDoubleExtra("rate", 0.0)
 
         val tv = findViewById<TextView>(R.id.tvResult)
 
+        //muestra informacion
         tv.text = """
             Monto: $amount
             Tasa aplicada: $rate
             Resultado: $result
-        """.trimIndent()
+        """.trimIndent() //contruye texto que el usuario vera
     }
 }
